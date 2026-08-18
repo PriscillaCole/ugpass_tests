@@ -227,6 +227,66 @@ cy.get('#watermark-field')
 cy.get('#Save')
   .should('exist')
   .and('contain.text', 'Sign')
+
+
+  cy.get('#pdf-container', {
+  timeout: 60000,
+}).should('be.visible')
+
+cy.get(
+  '.pdf-page[data-page-number="0"]',
+  {
+    timeout: 60000,
+  }
+)
+  .should('exist')
+  .and('be.visible')
+
+// Place Signature, QR code and any available paid fields
+cy.placeAvailableSigningFields()
+
+// Apply watermark only when available
+cy.get('body').then(($body) => {
+  const $watermark =
+    $body.find('#watermark-field')
+
+  if (
+    $watermark.length > 0 &&
+    $watermark.is(':visible')
+  ) {
+    cy.applyWatermark(
+      'UGPASS TEST DOCUMENT'
+    )
+  }
+})
+
+// Start signing
+cy.get('#Save', {
+  timeout: 30000,
+})
+  .should('be.visible')
+  .and('contain.text', 'Sign')
+  .and('not.be.disabled')
+  .click()
+
+// Confirm signing started
+cy.get('#signing-status-box', {
+  timeout: 60000,
+}).should('be.visible')
+
+cy.get('#SigningModalheading')
+  .should('be.visible')
+  .and(
+    'contain.text',
+    'Document Signing Status'
+  )
+
+cy.get('#stepper-message')
+  .should('be.visible')
+  .and(
+    'contain.text',
+    'Check for UgPass mobile app notification'
+  )
     }
   )
 })
