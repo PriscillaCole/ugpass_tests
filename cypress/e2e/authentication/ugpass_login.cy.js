@@ -1,6 +1,9 @@
 describe('UgPass Login Flow', () => {
   beforeEach(() => {
-    cy.ugpassLogin(Cypress.env('UGPASS_USER'))
+    cy.ugpassLogin(
+    'individual',
+    Cypress.env('UGPASS_INDIVIDUAL_USER')
+  )
   })
 
   it('should log in and display the dashboard', () => {

@@ -16,3 +16,7 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 import 'cypress-real-events/support'
+import './commands/authentication.commands'
+import './commands/document.commands'
+import './commands/upload_document.commands'
+import './commands/signing.commands'

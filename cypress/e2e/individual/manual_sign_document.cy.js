@@ -1,42 +1,20 @@
-describe('UgPass Manual Document Signing', () => {
-  const documentPath =
-    'cypress/fixtures/manual_sign_document.docx'
+describe(
+  'Individual Manual Signing',
+  () => {
+    const testDocument =
+      'cypress/fixtures/documents/individual_manual_sign.docx'
 
-  beforeEach(() => {
-    cy.ugpassLogin(Cypress.env('UGPASS_USER'))
-    cy.visit('/Dashboard')
+    beforeEach(() => {
+      cy.startSigningFlow({
+        accountType: 'individual',
 
-    cy.contains('h5', 'Sign Document Yourself', {
-      timeout: 30000,
-    })
-      .closest('.card-body')
-      .find('button.sign-yourself-btn')
-      .should('be.visible')
-      .click()
+        user: Cypress.env(
+          'UGPASS_INDIVIDUAL_USER'
+        ),
 
-    cy.location('pathname', {
-      timeout: 30000,
-    }).should(
-      'eq',
-      '/Documents/CreateDocuments'
-    )
-
-    cy.get('#File')
-      .should('exist')
-      .selectFile(documentPath, {
-        force: true,
+        documentPath: testDocument,
       })
-
-    cy.get('#DocumentName', {
-      timeout: 30000,
-    }).should('not.have.value', '')
-
-    cy.get('#Continue', {
-      timeout: 60000,
     })
-      .should('be.visible')
-      .and('not.be.disabled')
-  })
 
   it('places the signature and applies a watermark', () => {
     cy.get('#Continue').click()
